@@ -1,0 +1,7 @@
+-- SUPERSEDED / NOT APPLIED.
+-- This file was drafted before discovering that the linked Supabase project
+-- ("clopen", project_id dzeuamikcqdutzcnmsno) already has a real schema
+-- (restaurants, profiles, menu_items, cocktails, training_modules, etc.).
+-- The from-scratch design here was never applied to the database.
+-- See 00004_organizations_multi_tenant.sql for the migration that actually
+-- extends the real schema with multi-tenant organizations.

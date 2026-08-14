@@ -1,0 +1,1 @@
+-- SUPERSEDED / NOT APPLIED. See 00001_core_schema.sql for why.

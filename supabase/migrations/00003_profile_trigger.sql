@@ -1,0 +1,2 @@
+-- SUPERSEDED / NOT APPLIED. See 00001_core_schema.sql for why.
+-- The real database already has an equivalent handle_new_user() trigger.
