@@ -1883,6 +1883,7 @@ export type Database = {
           created_at: string
           created_by: string | null
           expected_delivery_date: string | null
+          external_reference: string | null
           id: string
           notes: string | null
           order_date: string
@@ -1896,6 +1897,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           expected_delivery_date?: string | null
+          external_reference?: string | null
           id?: string
           notes?: string | null
           order_date?: string
@@ -1909,6 +1911,7 @@ export type Database = {
           created_at?: string
           created_by?: string | null
           expected_delivery_date?: string | null
+          external_reference?: string | null
           id?: string
           notes?: string | null
           order_date?: string
@@ -2294,6 +2297,7 @@ export type Database = {
           restaurant_id: string
           roles: string[]
           skill_level: number
+          user_id: string | null
         }
         Insert: {
           active?: boolean
@@ -2302,6 +2306,7 @@ export type Database = {
           restaurant_id: string
           roles?: string[]
           skill_level: number
+          user_id?: string | null
         }
         Update: {
           active?: boolean
@@ -2310,6 +2315,7 @@ export type Database = {
           restaurant_id?: string
           roles?: string[]
           skill_level?: number
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -2317,6 +2323,13 @@ export type Database = {
             columns: ["restaurant_id"]
             isOneToOne: false
             referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "staff_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]
@@ -3065,19 +3078,6 @@ export type Database = {
         Returns: Json
       }
       get_menu_items_for_comms: { Args: never; Returns: Json }
-      gl_daily_flash: {
-        Args: {
-          p_end_date: string
-          p_restaurant_id: string
-          p_start_date: string
-        }
-        Returns: {
-          labor_cost: number
-          labor_pct: number
-          net_sales: number
-          sales_date: string
-        }[]
-      }
       gl_actual_by_account: {
         Args: {
           p_end_date: string
@@ -3149,6 +3149,19 @@ export type Database = {
           variance_pct: number
         }[]
       }
+      gl_daily_flash: {
+        Args: {
+          p_end_date: string
+          p_restaurant_id: string
+          p_start_date: string
+        }
+        Returns: {
+          labor_cost: number
+          labor_pct: number
+          net_sales: number
+          sales_date: string
+        }[]
+      }
       gl_pnl_summary: {
         Args: {
           p_end_date: string
@@ -3171,7 +3184,7 @@ export type Database = {
         Returns: {
           cogs_amount: number
           cogs_pct: number
-          location_name: string | null
+          location_name: string
           operating_income: number
           operating_income_pct: number
           prime_cost_amount: number
@@ -3179,6 +3192,14 @@ export type Database = {
           restaurant_id: string
           restaurant_name: string
           revenue: number
+        }[]
+      }
+      inventory_close_count_period: {
+        Args: { p_count_period_id: string }
+        Returns: {
+          inventory_item_id: string
+          variance_base_unit: number
+          variance_value: number
         }[]
       }
       inventory_log_waste: {
@@ -3195,24 +3216,16 @@ export type Database = {
       inventory_menu_engineering: {
         Args: { p_restaurant_id: string }
         Returns: {
-          category_name: string | null
-          cost_pct: number | null
+          category_name: string
+          cost_pct: number
           is_costed: boolean
           item_id: string
           kind: string
           name: string
           over_target: boolean
-          price: number | null
+          price: number
           target_pct: number
           theoretical_cost: number
-        }[]
-      }
-      inventory_close_count_period: {
-        Args: { p_count_period_id: string }
-        Returns: {
-          inventory_item_id: string
-          variance_base_unit: number
-          variance_value: number
         }[]
       }
       inventory_recipe_theoretical_cost: {
