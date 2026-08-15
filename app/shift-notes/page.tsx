@@ -1,6 +1,9 @@
 import { Nav } from "@/components/nav";
 import { getCurrentProfile } from "@/lib/current-profile";
 import { AcknowledgeButton } from "@/components/acknowledge-button";
+import { ShiftNoteFormClient } from "./shift-note-form-client";
+import { ShiftNoteAdminControls } from "./shift-note-admin-controls";
+import { canManageScope } from "@/lib/shift-notes";
 
 const priorityStyles: Record<string, string> = {
   urgent: "bg-red-100 text-red-700",
@@ -10,7 +13,7 @@ const priorityStyles: Record<string, string> = {
 };
 
 export default async function ShiftNotesPage() {
-  const { user, restaurant, supabase } = await getCurrentProfile();
+  const { user, profile, restaurant, supabase } = await getCurrentProfile();
 
   if (!user || !restaurant) {
     return (
@@ -25,11 +28,16 @@ export default async function ShiftNotesPage() {
     );
   }
 
+  const role = profile?.role ?? "";
+  const canPostNotes = role === "owner_admin" || role === "head_bartender";
+
+  const nowIso = new Date().toISOString();
   const { data: notes } = await supabase
     .from("shift_notes")
     .select("*")
     .eq("restaurant_id", restaurant.id)
     .eq("is_active", true)
+    .or(`expires_at.is.null,expires_at.gt.${nowIso}`)
     .order("is_pinned", { ascending: false })
     .order("service_date", { ascending: false });
 
@@ -54,6 +62,12 @@ export default async function ShiftNotesPage() {
         <h1 className="mb-6 text-2xl font-semibold text-zinc-900">
           Shift Notes
         </h1>
+
+        {canPostNotes && (
+          <div className="mb-6">
+            <ShiftNoteFormClient role={role} />
+          </div>
+        )}
 
         {(notes?.length ?? 0) === 0 && (
           <p className="text-sm text-zinc-500">
@@ -93,7 +107,14 @@ export default async function ShiftNotesPage() {
                 {note.service_date}
                 {note.shift_type ? ` · ${note.shift_type}` : ""}
                 {note.note_scope !== "general" ? ` · ${note.note_scope}` : ""}
+                {note.expires_at
+                  ? ` · expires ${note.expires_at.slice(0, 10)}`
+                  : ""}
               </p>
+
+              {canManageScope(role, note.note_scope) && (
+                <ShiftNoteAdminControls note={note} role={role} />
+              )}
             </div>
           ))}
         </div>
