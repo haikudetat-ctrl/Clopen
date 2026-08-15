@@ -10,6 +10,7 @@ const links = [
 ];
 
 const ownerLinks = [
+  { href: "/menu/manage", label: "Manage Menu" },
   { href: "/inventory", label: "Inventory" },
   { href: "/reports", label: "Reports" },
 ];
