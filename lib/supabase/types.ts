@@ -457,6 +457,119 @@ export type Database = {
           },
         ]
       }
+      daily_sales_summary: {
+        Row: {
+          check_count: number | null
+          covers: number | null
+          created_at: string
+          id: string
+          notes: string | null
+          recorded_by: string | null
+          refunds: number
+          reported_gross_sales: number | null
+          reported_net_sales: number | null
+          restaurant_id: string
+          sales_date: string
+          service_charges: number
+          source: string
+          tax_collected: number
+          tips_total: number
+          updated_at: string
+          voids: number
+        }
+        Insert: {
+          check_count?: number | null
+          covers?: number | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          recorded_by?: string | null
+          refunds?: number
+          reported_gross_sales?: number | null
+          reported_net_sales?: number | null
+          restaurant_id: string
+          sales_date: string
+          service_charges?: number
+          source?: string
+          tax_collected?: number
+          tips_total?: number
+          updated_at?: string
+          voids?: number
+        }
+        Update: {
+          check_count?: number | null
+          covers?: number | null
+          created_at?: string
+          id?: string
+          notes?: string | null
+          recorded_by?: string | null
+          refunds?: number
+          reported_gross_sales?: number | null
+          reported_net_sales?: number | null
+          restaurant_id?: string
+          sales_date?: string
+          service_charges?: number
+          source?: string
+          tax_collected?: number
+          tips_total?: number
+          updated_at?: string
+          voids?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_sales_summary_recorded_by_fkey"
+            columns: ["recorded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "daily_sales_summary_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      daily_sales_tenders: {
+        Row: {
+          amount: number
+          created_at: string
+          id: string
+          restaurant_id: string
+          sales_date: string
+          tender_type: string
+          txn_count: number | null
+        }
+        Insert: {
+          amount?: number
+          created_at?: string
+          id?: string
+          restaurant_id: string
+          sales_date: string
+          tender_type: string
+          txn_count?: number | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          id?: string
+          restaurant_id?: string
+          sales_date?: string
+          tender_type?: string
+          txn_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_sales_tenders_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fiscal_periods: {
         Row: {
           created_at: string
@@ -2051,6 +2164,115 @@ export type Database = {
           },
         ]
       }
+      sales_import_mappings: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          header_signature: string
+          id: string
+          mapping: Json
+          name: string
+          restaurant_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          header_signature: string
+          id?: string
+          mapping: Json
+          name: string
+          restaurant_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          header_signature?: string
+          id?: string
+          mapping?: Json
+          name?: string
+          restaurant_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_import_mappings_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_import_mappings_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sales_imports: {
+        Row: {
+          created_at: string
+          file_name: string | null
+          id: string
+          payload: Json
+          replaced_import_id: string | null
+          restaurant_id: string
+          sales_date: string
+          source: string
+          status: string
+          uploaded_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          file_name?: string | null
+          id?: string
+          payload: Json
+          replaced_import_id?: string | null
+          restaurant_id: string
+          sales_date: string
+          source: string
+          status?: string
+          uploaded_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          file_name?: string | null
+          id?: string
+          payload?: Json
+          replaced_import_id?: string | null
+          restaurant_id?: string
+          sales_date?: string
+          source?: string
+          status?: string
+          uploaded_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sales_imports_replaced_import_id_fkey"
+            columns: ["replaced_import_id"]
+            isOneToOne: false
+            referencedRelation: "sales_imports"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_imports_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "sales_imports_uploaded_by_fkey"
+            columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       schedule_assignments: {
         Row: {
           day: number
@@ -3045,6 +3267,11 @@ export type Database = {
       can_manage_budget: { Args: never; Returns: boolean }
       can_manage_inventory_catalog: { Args: never; Returns: boolean }
       can_operate_inventory: { Args: never; Returns: boolean }
+      can_record_sales: { Args: never; Returns: boolean }
+      can_record_sales_for: {
+        Args: { target_restaurant_id: string }
+        Returns: boolean
+      }
       can_view_financials: { Args: never; Returns: boolean }
       current_organization_id: { Args: never; Returns: string }
       current_restaurant_id: { Args: never; Returns: string }
@@ -3194,6 +3421,10 @@ export type Database = {
           revenue: number
         }[]
       }
+      ingest_daily_sales: {
+        Args: { p_payload: Json; p_replace?: boolean; p_restaurant_id: string }
+        Returns: Json
+      }
       inventory_close_count_period: {
         Args: { p_count_period_id: string }
         Returns: {
@@ -3248,6 +3479,7 @@ export type Database = {
         }[]
       }
       is_head_bartender: { Args: never; Returns: boolean }
+      is_manager: { Args: never; Returns: boolean }
       is_owner_admin: { Args: never; Returns: boolean }
       is_same_org_restaurant: {
         Args: { target_restaurant_id: string }
