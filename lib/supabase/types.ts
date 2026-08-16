@@ -406,6 +406,85 @@ export type Database = {
           },
         ]
       }
+      daily_item_sales: {
+        Row: {
+          category: string
+          cocktail_id: string | null
+          created_at: string
+          discounts: number
+          gross_amount: number
+          id: string
+          item_name: string
+          menu_group: string
+          menu_item_id: string | null
+          net_amount: number
+          quantity: number
+          refunds: number
+          restaurant_id: string
+          sales_category_raw: string | null
+          sales_date: string
+          voids: number
+        }
+        Insert: {
+          category: string
+          cocktail_id?: string | null
+          created_at?: string
+          discounts?: number
+          gross_amount?: number
+          id?: string
+          item_name: string
+          menu_group?: string
+          menu_item_id?: string | null
+          net_amount?: number
+          quantity?: number
+          refunds?: number
+          restaurant_id: string
+          sales_category_raw?: string | null
+          sales_date: string
+          voids?: number
+        }
+        Update: {
+          category?: string
+          cocktail_id?: string | null
+          created_at?: string
+          discounts?: number
+          gross_amount?: number
+          id?: string
+          item_name?: string
+          menu_group?: string
+          menu_item_id?: string | null
+          net_amount?: number
+          quantity?: number
+          refunds?: number
+          restaurant_id?: string
+          sales_category_raw?: string | null
+          sales_date?: string
+          voids?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "daily_item_sales_cocktail_id_fkey"
+            columns: ["cocktail_id"]
+            isOneToOne: false
+            referencedRelation: "cocktails"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "daily_item_sales_menu_item_id_fkey"
+            columns: ["menu_item_id"]
+            isOneToOne: false
+            referencedRelation: "menu_items"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "daily_item_sales_restaurant_id_fkey"
+            columns: ["restaurant_id"]
+            isOneToOne: false
+            referencedRelation: "restaurants"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       daily_sales: {
         Row: {
           comps: number
@@ -2168,6 +2247,7 @@ export type Database = {
         Row: {
           created_at: string
           created_by: string | null
+          file_kind: string
           header_signature: string
           id: string
           mapping: Json
@@ -2178,6 +2258,7 @@ export type Database = {
         Insert: {
           created_at?: string
           created_by?: string | null
+          file_kind?: string
           header_signature: string
           id?: string
           mapping: Json
@@ -2188,6 +2269,7 @@ export type Database = {
         Update: {
           created_at?: string
           created_by?: string | null
+          file_kind?: string
           header_signature?: string
           id?: string
           mapping?: Json
@@ -2222,6 +2304,7 @@ export type Database = {
           restaurant_id: string
           sales_date: string
           source: string
+          source_files: string[] | null
           status: string
           uploaded_by: string | null
         }
@@ -2234,6 +2317,7 @@ export type Database = {
           restaurant_id: string
           sales_date: string
           source: string
+          source_files?: string[] | null
           status?: string
           uploaded_by?: string | null
         }
@@ -2246,6 +2330,7 @@ export type Database = {
           restaurant_id?: string
           sales_date?: string
           source?: string
+          source_files?: string[] | null
           status?: string
           uploaded_by?: string | null
         }
