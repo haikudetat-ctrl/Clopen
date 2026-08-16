@@ -7,6 +7,7 @@ const links = [
   { href: "/menu", label: "Menu" },
   { href: "/training", label: "Training" },
   { href: "/shift-notes", label: "Shift Notes" },
+  { href: "/scheduling", label: "Scheduling" },
 ];
 
 const ownerLinks = [
